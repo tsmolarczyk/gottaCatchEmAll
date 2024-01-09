@@ -1,0 +1,10 @@
+<template>
+  <ul>
+    <li repeat.for="pokemon of pokemons">
+      <h2>${pokemon.name}123</h2>
+      <img src.bind="pokemon.imageUrl" alt="image ${pokemon.name}" style="height:150px;">
+      <button click.delegate="showDetails(pokemon)">Details</button>
+    </li>
+  </ul>
+  <h1>pokelist</h1>
+</template>
