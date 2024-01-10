@@ -1,7 +1,9 @@
 <template>
-  <button click.delegate="updateAllPokemons()" style="margin-bottom:15px">Update Pokemons</button>
-  <form submit.delegate="performSearch()">
-    <input type="text" style="color:blue; width: 200px" placeholder="Search..." value.bind="searchQuery">
+  <form submit.delegate="fetchPokemons()">
+    <label for="searchField">Search:</label>
+    <input type="text" id="searchField" style="color:blue; width: 200px" placeholder="Search..." value.bind="searchQuery"/>
     <button type="submit" >Search</button>
+    <button click.delegate="clearList()">Clear</button>
+
   </form>
 </template>

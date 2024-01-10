@@ -1,43 +1,111 @@
-import {HttpClient, json} from 'aurelia-fetch-client';
-
+import { HttpClient } from "aurelia-fetch-client";
+import { EventAggregator } from "aurelia-event-aggregator";
+import { inject } from "aurelia-framework";
+@inject(HttpClient, EventAggregator)
 export class SearchBar {
   static inject = [HttpClient];
-  searchQuery = '';
-  pokemons = [];
+  searchQuery = "";
+  pokemonsToDisplay = [];
+  allColorsOfPokemons = [
+    "black",
+    "blue",
+    "brown",
+    "gray",
+    "green",
+    "pink",
+    "purple",
+    "red",
+    "white",
+    "yellow",
+  ];
 
-
-  constructor(private http: HttpClient) {
-    http.configure(config => {
-      config
-        .useStandardConfiguration()
-        .withBaseUrl('https://pokeapi.co/api/v2/');
-    });
+  constructor(
+    private http: HttpClient,
+    private ea: EventAggregator,
+  ) {
+    this.fetchPokemons();
   }
 
-  async performSearch() {
-    if (this.searchQuery) {
-      try {
-        const response = await this.http.fetch(`pokemon/${this.searchQuery.toLowerCase()}*`);
-        const data = await response.json();
-        console.log(data);
-        this.searchQuery = '';
-      } catch (error) {
-        console.error('Error fetching data:', error);
+  fetchPokemons() {
+    this.pokemonsToDisplay = [];
+
+    const pokemonsInStorage = localStorage.getItem("pokemons");
+
+    if (!pokemonsInStorage) {
+      this.http
+        .fetch("https://pokeapi.co/api/v2/pokemon?limit=1500")
+        .then((response) => response.json())
+        .then((data) => {
+          localStorage.setItem("pokemons", JSON.stringify(data.results));
+          if (this.searchQuery !== "") {
+            this.processPokemons(data.results);
+          }
+        })
+        .catch((error) => {
+          console.error("Error occurs:", error);
+        });
+    } else {
+      if (this.searchQuery !== "") {
+        this.processPokemons(JSON.parse(pokemonsInStorage));
       }
     }
   }
-  async updateAllPokemons() {
-    try {
-      const response = await this.http.fetch('pokemon?limit=1000');
-      const data = await response.json();
 
-      localStorage.setItem('pokemonData', JSON.stringify(data.results));
+  async processPokemons(allPokemons) {
+    let pokemonsToFilter = [...allPokemons];
 
-      this.pokemons = data.results;
-
-      console.log('Updated all Pokémon data:', this.pokemons);
-    } catch (error) {
-      console.error('Error updating Pokémon data:', error);
+    if (this.isColorQuery(this.searchQuery)) {
+      const colorPokemons = await this.fetchPokemonsByColor(
+        this.searchQuery.toLowerCase(),
+      );
+      pokemonsToFilter = [...colorPokemons]; // Użyj tylko Pokémonów znalezionych przez kolor
     }
+
+    // Filtrowanie tylko wtedy, gdy searchQuery nie jest kolorem
+    if (!this.isColorQuery(this.searchQuery)) {
+      pokemonsToFilter = pokemonsToFilter.filter((pokemon) =>
+        pokemon.name.includes(this.searchQuery),
+      );
+    }
+
+    const uniquePokemons = Array.from(
+      new Set(pokemonsToFilter.map((p) => p.name)),
+    ).map((name) => {
+      return pokemonsToFilter.find((p) => p.name === name);
+    });
+
+    this.filterAndDisplayPokemons(uniquePokemons);
+  }
+
+  filterAndDisplayPokemons(pokemons) {
+    Promise.all(
+      pokemons.map((pokemon) =>
+        this.http.fetch(pokemon.url).then((response) => response.json()),
+      ),
+    ).then((detailsArray) => {
+      this.pokemonsToDisplay = detailsArray
+        .filter((details) => details.sprites && details.sprites.front_default) // Sprawdź czy istnieje details.sprites i details.sprites.front_default
+        .map((details) => ({
+          name: details.name,
+          imageUrl: details.sprites.front_default,
+        }));
+      this.ea.publish("pokemonData", this.pokemonsToDisplay);
+    });
+  }
+
+  isColorQuery(query) {
+    return this.allColorsOfPokemons.includes(query.toLowerCase());
+  }
+
+  clearList() {
+    this.ea.publish("clearPokemonsList", {});
+  }
+  async fetchPokemonsByColor(color) {
+    const response = await this.http.fetch(
+      `https://pokeapi.co/api/v2/pokemon-color/${color}`,
+    );
+    const data = await response.json();
+    console.log("red pokemons", data);
+    return data.pokemon_species;
   }
 }
