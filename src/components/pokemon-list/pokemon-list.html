@@ -1,9 +1,16 @@
 <template>
-  <ul>
-    <li repeat.for="pokemon of pokemonsToDisplay">
-      <h2>${formatName(pokemon.name)}</h2>
-      <img src.bind="pokemon.imageUrl" alt="image ${pokemon.name}" style="height:150px;">
-      <button click.delegate="showDetails(pokemon)">Details</button>
+  <ul class="container" if.bind="pokemonsToDisplay.length">
+    <li
+      repeat.for="pokemon of pokemonsToDisplay"
+      class="pokemon-field"
+      click.delegate="showDetails(pokemon)"
+    >
+      <h3>${formatName(pokemon.name)}</h3>
+      <img
+        class="field-img"
+        src.bind="pokemon.imageUrl"
+        alt="image ${pokemon.name}"
+      />
     </li>
   </ul>
 </template>

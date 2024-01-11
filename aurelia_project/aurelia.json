@@ -18,8 +18,17 @@
       "server": "dev",
       "extractCss": "prod",
       "coverage": false
-    }
-  },
+    },
+    "bundles": [
+      {
+        "name": "app-bundle.js",
+        "source": [
+          "src/**/*.js",
+          "src/**/*.less"
+        ]
+      }
+    ]
+},
   "platform": {
     "hmr": false,
     "open": false,

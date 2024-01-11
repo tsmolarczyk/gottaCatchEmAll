@@ -38,6 +38,8 @@
     "jest-cli": "^29.5.0",
     "jest-transform-stub": "^2.0.0",
     "json-loader": "^0.5.7",
+    "less": "^4.2.0",
+    "less-loader": "^11.1.4",
     "mini-css-extract-plugin": "^2.7.6",
     "minimatch": "^5.1.2",
     "promise-polyfill": "^8.3.0",

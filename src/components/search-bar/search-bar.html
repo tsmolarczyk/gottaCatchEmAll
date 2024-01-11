@@ -1,9 +1,16 @@
 <template>
+  <img src="../../../static/pokelogo.png" alt="Pokemon logo" class="logo-img" />
   <form submit.delegate="fetchPokemons()">
-    <label for="searchField">Search:</label>
-    <input type="text" id="searchField" style="color:blue; width: 200px" placeholder="Search..." value.bind="searchQuery"/>
-    <button type="submit" >Search</button>
-    <button click.delegate="clearList()">Clear</button>
-
+    <input
+      class="form-input"
+      type="text"
+      id="searchField"
+      placeholder="Search..."
+      value.bind="searchQuery"
+    />
+    <div class="btns">
+      <button class="test-class" type="submit">Search</button>
+      <button click.delegate="clearList()">Clear</button>
+    </div>
   </form>
 </template>

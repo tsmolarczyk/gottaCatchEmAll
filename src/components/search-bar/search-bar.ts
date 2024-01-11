@@ -1,6 +1,7 @@
 import { HttpClient } from "aurelia-fetch-client";
 import { EventAggregator } from "aurelia-event-aggregator";
 import { inject } from "aurelia-framework";
+import "./search-bar.less";
 @inject(HttpClient, EventAggregator)
 export class SearchBar {
   static inject = [HttpClient];
@@ -58,10 +59,9 @@ export class SearchBar {
       const colorPokemons = await this.fetchPokemonsByColor(
         this.searchQuery.toLowerCase(),
       );
-      pokemonsToFilter = [...colorPokemons]; // Użyj tylko Pokémonów znalezionych przez kolor
+      pokemonsToFilter = [...colorPokemons];
     }
 
-    // Filtrowanie tylko wtedy, gdy searchQuery nie jest kolorem
     if (!this.isColorQuery(this.searchQuery)) {
       pokemonsToFilter = pokemonsToFilter.filter((pokemon) =>
         pokemon.name.includes(this.searchQuery),
@@ -84,7 +84,7 @@ export class SearchBar {
       ),
     ).then((detailsArray) => {
       this.pokemonsToDisplay = detailsArray
-        .filter((details) => details.sprites && details.sprites.front_default) // Sprawdź czy istnieje details.sprites i details.sprites.front_default
+        .filter((details) => details.sprites && details.sprites.front_default)
         .map((details) => ({
           name: details.name,
           imageUrl: details.sprites.front_default,
@@ -98,6 +98,7 @@ export class SearchBar {
   }
 
   clearList() {
+    this.searchQuery = "";
     this.ea.publish("clearPokemonsList", {});
   }
   async fetchPokemonsByColor(color) {

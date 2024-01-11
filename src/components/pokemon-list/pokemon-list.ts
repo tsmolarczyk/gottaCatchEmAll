@@ -1,9 +1,11 @@
 import { EventAggregator } from "aurelia-event-aggregator";
 import { inject } from "aurelia-framework";
+import "./pokemon-list.less";
 
 @inject(EventAggregator)
 export class PokemonList {
   pokemonsToDisplay: object[];
+  searchPerformed = false;
 
   constructor(private ea: EventAggregator) {
     ea.subscribe("pokemonData", (data) => {
