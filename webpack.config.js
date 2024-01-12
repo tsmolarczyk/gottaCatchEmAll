@@ -53,7 +53,7 @@ module.exports = ({ production }, { analyze, hmr, port, host }) => ({
   },
   mode: production ? "production" : "development",
   output: {
-    path: outDir,
+    path: path.resolve(__dirname, "public"),
     publicPath: baseUrl,
     filename: production
       ? "[name].[chunkhash].bundle.js"
