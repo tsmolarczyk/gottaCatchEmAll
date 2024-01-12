@@ -106,6 +106,7 @@ export class SearchBar {
       `https://pokeapi.co/api/v2/pokemon-color/${color}`,
     );
     const data = await response.json();
+    // TODO:add color search
     console.log("red pokemons", data);
     return data.pokemon_species;
   }

@@ -1,31 +1,24 @@
 <template>
   <div class="loading-component">
     <div id="lottie-container"></div>
+
     <div if.bind="showOtherContent">
       <div class="pokemon-card">
-        <!--// TODO: Image Pokemon-->
         <div class="pokemon-info">
-          <h1 class="pokemon-name">Pikachu</h1>
+          <img
+            class="pokemon-image"
+            src="${pokemonData.sprites.front_default}"
+            alt="${pokemonData.name}"
+          />
+          <h1 class="pokemon-name">${pokemonData.name.toUpperCase()}</h1>
           <div class="pokemon-stats">
-            <div class="stat-item">HP: <span class="stat-value">35</span></div>
-            <div class="stat-item">
-              Attack: <span class="stat-value">55</span>
-            </div>
-            <div class="stat-item">
-              Defense: <span class="stat-value">40</span>
-            </div>
-            <div class="stat-item">
-              Speed: <span class="stat-value">90</span>
-            </div>
-            <div class="stat-item">
-              Special-Attack: <span class="stat-value">50</span>
-            </div>
-            <div class="stat-item">
-              Special-Defense: <span class="stat-value">50</span>
+            <div class="stat-item" repeat.for="stat of pokemonData.stats">
+              ${toStatName(stat.stat.name)}:
+              <span class="stat-value">${stat.base_stat}</span>
             </div>
           </div>
           <button class="back-button" click.delegate="returnHome()">
-            Wstecz
+            Return
           </button>
         </div>
       </div>

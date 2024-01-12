@@ -6,7 +6,6 @@ import { Router } from "aurelia-router";
 @inject(EventAggregator, Router)
 export class PokemonList {
   pokemonsToDisplay: object[];
-  searchPerformed = false;
 
   constructor(
     private ea: EventAggregator,
@@ -32,8 +31,7 @@ export class PokemonList {
   }
 
   showDetails(pokemon) {
-    // this.router.navigateToRoute("pokemonDetails", { name: pokemon.name });
-    this.router.navigateToRoute("details");
+    this.router.navigateToRoute("details", { name: pokemon.name });
     console.log("Details for:", pokemon.name);
   }
 }

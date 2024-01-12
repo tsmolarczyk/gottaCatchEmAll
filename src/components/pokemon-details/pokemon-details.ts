@@ -17,35 +17,39 @@ export class PokemonDetails {
     private router: Router,
   ) {}
 
-  async fetchPokemonData() {
-    console.log("details fetch");
+  async activate(params) {
+    if (params.name) {
+      this.pokemonName = params.name;
+      await this.fetchPokemonData(this.pokemonName);
+    }
+  }
+  async fetchPokemonData(pokemonName = this.pokemonName) {
+    if (!pokemonName) {
+      console.error("No pokemon name provided");
+      return;
+    }
+
     try {
       const response = await this.http.fetch(
-        `https://pokeapi.co/api/v2/pokemon/pikachu`,
+        `https://pokeapi.co/api/v2/pokemon/${pokemonName}`,
       );
       this.pokemonData = await response.json();
-      console.log("this.pokemonData", this.pokemonData);
     } catch (error) {
       console.error("Error fetching pokemon data:", error);
     }
   }
 
-  renderPokemonStats() {
-    const statsHtml = this.pokemonData.stats
-      .map((stat) => {
-        const statName = stat.stat.name.replace(/-/g, " ");
-        return `<div class="stat-item">
-        <strong>${statName.toUpperCase()}:</strong> <span class="stat-value">${
-          stat.base_stat
-        }</span>
-      </div>`;
-      })
-      .join("");
+  toStatName(statName: string): string {
+    return statName
+      .replace(/-/g, " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
   }
 
   async attached() {
     console.log("attached method called");
-    await this.fetchPokemonData();
+    if (this.pokemonName) {
+      await this.fetchPokemonData(this.pokemonName);
+    }
 
     const container = document.getElementById("lottie-container");
     container.style.width = "20%";
@@ -62,7 +66,6 @@ export class PokemonDetails {
 
     this.animation.addEventListener("complete", () => {
       this.showOtherContent = true;
-      this.renderPokemonStats();
       this.animation.destroy();
       container.style.display = "none";
     });
@@ -72,7 +75,6 @@ export class PokemonDetails {
     this.animation?.destroy();
   }
   returnHome() {
-    // this.router.navigateToRoute("pokemonDetails", { name: pokemon.name });
     this.router.navigateToRoute("home");
     console.log("Details for:");
   }

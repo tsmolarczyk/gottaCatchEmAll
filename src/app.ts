@@ -14,13 +14,14 @@ export class App {
         title: "Search for Pokemon",
       },
       {
-        route: "details",
+        route: "details/:name",
         name: "details",
         moduleId: PLATFORM.moduleName(
           "components/pokemon-details/pokemon-details",
         ),
         nav: true,
         title: "Details",
+        href: "details/pokemon",
       },
     ]);
 

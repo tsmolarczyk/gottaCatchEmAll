@@ -1,33 +1,77 @@
-.search-container {
-  display: flex;
-  flex-direction: column;
-}
+@primary-color: cadetblue;
+@secondary-color: #f2f2f2;
+@font-size-base: 16px;
 
-.logo-img {
-  display: block;
-  margin: 0 auto;
-  width: 20rem;
-}
-
-form {
-  display: flex;
-  margin: 0 auto;
-  justify-content: center;
-}
-input {
-  width: 80%;
-  border: 1px solid cadetblue;
-  border-radius: 3px;
-  padding-left: 10px;
-  height: 2rem;
-}
-
-.btns {
+.flex-center() {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+body {
+  font-size: @font-size-base;
+  font-family: Arial, sans-serif;
+  background-color: @secondary-color;
+}
+
+.search-container {
+  .flex-center();
+  flex-direction: column;
+  margin: 20px;
+}
+
+.logo-img {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 20rem;
+}
+
+form {
+  .flex-center();
+  flex-direction: column;
+  margin: 20px auto 0;
+  width: 90%;
+  max-width: 600px;
+
+  @media (min-width: 600px) {
+    flex-direction: row;
+  }
+}
+
+input[type="text"] {
+  width: 100%;
+  border: 1px solid @primary-color;
+  border-radius: 3px;
+  padding: 0 12px;
+  height: 3rem;
+
+  @media (min-width: 600px) {
+    width: 80%;
+  }
+}
+
+.btns {
+  .flex-center();
+  margin-top: 10px;
+
+  @media (min-width: 600px) {
+    margin-top: 0;
+    margin-left: 10px;
+  }
+}
+
 button {
+  background-color: @primary-color;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 10px 15px;
   margin-left: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: darken(@primary-color, 10%);
+  }
 }
