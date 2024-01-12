@@ -248,6 +248,7 @@ module.exports = ({ production }, { analyze, hmr, port, host }) => ({
     new AureliaPlugin(),
     new HtmlWebpackPlugin({
       template: "index.ejs",
+      favicon: "./static/favicon-pokeball.ico",
       metadata: {
         // available in index.ejs //
         baseUrl,

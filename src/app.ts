@@ -11,7 +11,7 @@ export class App {
         name: "home",
         moduleId: PLATFORM.moduleName("components/home-view/home-view"),
         nav: true,
-        title: "Home",
+        title: "Search for Pokemon",
       },
       {
         route: "details",
