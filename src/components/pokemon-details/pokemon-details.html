@@ -10,7 +10,12 @@
             src="${pokemonData.sprites.front_default}"
             alt="${pokemonData.name}"
           />
-          <h1 class="pokemon-name">${pokemonData.name.toUpperCase()}</h1>
+          <h1 class="pokemon-name">${toFormattedName(pokemonData.name)}</h1>
+
+          <div class="pokemon-description" if.bind="pokemonData.description">
+            <p>${pokemonData.description}</p>
+          </div>
+
           <div class="pokemon-stats">
             <div class="stat-item" repeat.for="stat of pokemonData.stats">
               ${toStatName(stat.stat.name)}:

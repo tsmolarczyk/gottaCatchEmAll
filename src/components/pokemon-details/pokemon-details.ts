@@ -4,8 +4,9 @@ import animationData from "../../../static/pokeball-animation.json";
 import "./pokemon-details.less";
 import { inject } from "aurelia-framework";
 import { Router } from "aurelia-router";
+import { PokemonDataService } from "../../resources/pokemon-data-service";
 
-@inject(HttpClient, Router)
+@inject(HttpClient, Router, PokemonDataService)
 export class PokemonDetails {
   pokemonName = "";
   pokemonData = null;
@@ -15,30 +16,31 @@ export class PokemonDetails {
   constructor(
     private http: HttpClient,
     private router: Router,
+    private pokemonDataService: PokemonDataService,
   ) {}
 
-  async activate(params) {
+  activate(params) {
     if (params.name) {
       this.pokemonName = params.name;
-      await this.fetchPokemonData(this.pokemonName);
-    }
-  }
-  async fetchPokemonData(pokemonName = this.pokemonName) {
-    if (!pokemonName) {
-      console.error("No pokemon name provided");
-      return;
-    }
-
-    try {
-      const response = await this.http.fetch(
-        `https://pokeapi.co/api/v2/pokemon/${pokemonName}`,
-      );
-      this.pokemonData = await response.json();
-    } catch (error) {
-      console.error("Error fetching pokemon data:", error);
+      this.pokemonDataService
+        .fetchPokemonDetails(this.pokemonName)
+        .then((pokemonData) => {
+          this.pokemonData = pokemonData;
+        })
+        .catch((error) => {
+          console.error("Error fetching pokemon details:", error);
+        });
     }
   }
 
+  toFormattedName(name: string): string {
+    return name
+      .replace(/-/g, " ")
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+  }
   toStatName(statName: string): string {
     return statName
       .replace(/-/g, " ")
@@ -46,11 +48,6 @@ export class PokemonDetails {
   }
 
   async attached() {
-    console.log("attached method called");
-    if (this.pokemonName) {
-      await this.fetchPokemonData(this.pokemonName);
-    }
-
     const container = document.getElementById("lottie-container");
     container.style.width = "20%";
     container.style.height = "auto";
@@ -74,8 +71,9 @@ export class PokemonDetails {
   detached() {
     this.animation?.destroy();
   }
+
   returnHome() {
     this.router.navigateToRoute("home");
-    console.log("Details for:");
+    this.pokemonDataService.clearPokemonsInView();
   }
 }

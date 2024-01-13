@@ -2,9 +2,11 @@
   <img src="../../../static/pokelogo.png" alt="Pokemon logo" class="logo-img" />
   <form submit.delegate="fetchPokemons()">
     <input
+      name="form-input"
       class="form-input"
       type="text"
       id="searchField"
+      autocomplete="false"
       placeholder="Search..."
       value.bind="searchQuery"
     />
@@ -13,4 +15,7 @@
       <button click.delegate="clearList()">Clear</button>
     </div>
   </form>
+  <div if.bind="!isResultFound" class="no-results-message">
+    No results, try again!
+  </div>
 </template>

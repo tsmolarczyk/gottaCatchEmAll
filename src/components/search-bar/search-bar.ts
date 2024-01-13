@@ -2,7 +2,9 @@ import { HttpClient } from "aurelia-fetch-client";
 import { EventAggregator } from "aurelia-event-aggregator";
 import { inject } from "aurelia-framework";
 import "./search-bar.less";
-@inject(HttpClient, EventAggregator)
+import { PokemonDataService } from "../../resources/pokemon-data-service";
+
+@inject(HttpClient, EventAggregator, PokemonDataService)
 export class SearchBar {
   static inject = [HttpClient];
   searchQuery = "";
@@ -19,10 +21,12 @@ export class SearchBar {
     "white",
     "yellow",
   ];
+  isResultFound = true;
 
   constructor(
     private http: HttpClient,
     private ea: EventAggregator,
+    private pokemonDataService: PokemonDataService,
   ) {
     this.fetchPokemons();
   }
@@ -55,16 +59,18 @@ export class SearchBar {
   async processPokemons(allPokemons) {
     let pokemonsToFilter = [...allPokemons];
 
-    if (this.isColorQuery(this.searchQuery)) {
+    const formattedQuery = this.searchQuery.replace(/\s+/g, "-");
+
+    if (this.isColorQuery(formattedQuery)) {
       const colorPokemons = await this.fetchPokemonsByColor(
-        this.searchQuery.toLowerCase(),
+        formattedQuery.toLowerCase(),
       );
       pokemonsToFilter = [...colorPokemons];
     }
 
-    if (!this.isColorQuery(this.searchQuery)) {
+    if (!this.isColorQuery(formattedQuery)) {
       pokemonsToFilter = pokemonsToFilter.filter((pokemon) =>
-        pokemon.name.includes(this.searchQuery),
+        pokemon.name.includes(formattedQuery),
       );
     }
 
@@ -89,25 +95,30 @@ export class SearchBar {
           name: details.name,
           imageUrl: details.sprites.front_default,
         }));
-      this.ea.publish("pokemonData", this.pokemonsToDisplay);
+      this.pokemonDataService.updatePokemons(this.pokemonsToDisplay);
+      this.isResultFound = this.pokemonsToDisplay.length > 0;
+      this.pokemonDataService.updatePokemons(this.pokemonsToDisplay);
+      console.log("pokemonsToDisplay", this.pokemonsToDisplay);
     });
   }
 
   isColorQuery(query) {
     return this.allColorsOfPokemons.includes(query.toLowerCase());
   }
-
   clearList() {
     this.searchQuery = "";
-    this.ea.publish("clearPokemonsList", {});
+    this.pokemonsToDisplay = [];
+    this.pokemonDataService.updatePokemons(this.pokemonsToDisplay);
+    this.isResultFound = true;
   }
+
   async fetchPokemonsByColor(color) {
     const response = await this.http.fetch(
       `https://pokeapi.co/api/v2/pokemon-color/${color}`,
     );
     const data = await response.json();
     // TODO:add color search
-    console.log("red pokemons", data);
+    console.log("red pokemons", data.pokemon_species);
     return data.pokemon_species;
   }
 }

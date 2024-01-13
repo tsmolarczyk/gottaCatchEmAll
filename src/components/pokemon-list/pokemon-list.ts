@@ -1,24 +1,28 @@
-import { EventAggregator } from "aurelia-event-aggregator";
 import { inject } from "aurelia-framework";
 import "./pokemon-list.less";
 import { Router } from "aurelia-router";
+import { PokemonDataService } from "../../resources/pokemon-data-service";
+import { Subscription } from "rxjs";
 
-@inject(EventAggregator, Router)
+@inject(PokemonDataService, Router)
 export class PokemonList {
-  pokemonsToDisplay: object[];
+  pokemonsToDisplay: object[] = [];
+  private subscriptions: Subscription[] = [];
 
   constructor(
-    private ea: EventAggregator,
+    private pokemonDataService: PokemonDataService,
     private router: Router,
   ) {
-    ea.subscribe("pokemonData", (data) => {
-      this.pokemonsToDisplay = data;
-    });
-    ea.subscribe("clearPokemonsList", () => {
-      this.clearPokemons();
-    });
+    const subscription = this.pokemonDataService.pokemons$.subscribe(
+      (pokemons) => {
+        this.pokemonsToDisplay = pokemons;
+      },
+    );
+    this.subscriptions.push(subscription);
   }
-
+  detached() {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
+  }
   formatName(name: string) {
     return name
       .replace(/-/g, " ")
@@ -32,6 +36,5 @@ export class PokemonList {
 
   showDetails(pokemon) {
     this.router.navigateToRoute("details", { name: pokemon.name });
-    console.log("Details for:", pokemon.name);
   }
 }

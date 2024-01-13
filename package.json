@@ -1,7 +1,7 @@
 {
   "name": "gottaCatchEmAll",
-  "description": "An Aurelia client application.",
-  "version": "0.1.0",
+  "description": "Pokemon search application in Aurelia.",
+  "version": "0.1.1",
   "repository": {
     "type": "???",
     "url": "???"
@@ -12,7 +12,8 @@
     "aurelia-bootstrapper": "^2.4.0",
     "aurelia-fetch-client": "^1.8.2",
     "aurelia-router": "^1.7.1",
-    "lottie-web": "^5.12.2"
+    "lottie-web": "^5.12.2",
+    "rxjs": "^7.8.1"
   },
   "devDependencies": {
     "@types/jest": "^29.5.2",
