@@ -7,7 +7,7 @@
         <div class="pokemon-info">
           <img
             class="pokemon-image"
-            src="${pokemonData.sprites.front_default}"
+            src="${pokemonData.sprites.front_default ? pokemonData.sprites.front_default : 'https://www.pngitem.com/pimgs/m/106-1062100_peter-griffin-pixel-art-hd-png-download-png.png'}"
             alt="${pokemonData.name}"
           />
           <h1 class="pokemon-name">${toFormattedName(pokemonData.name)}</h1>

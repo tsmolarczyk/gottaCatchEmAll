@@ -4,9 +4,13 @@ import { Router } from "aurelia-router";
 import { PokemonDataService } from "../../resources/pokemon-data-service";
 import { Subscription } from "rxjs";
 
+interface Pokemon {
+  name: string;
+}
+
 @inject(PokemonDataService, Router)
 export class PokemonList {
-  pokemonsToDisplay: object[] = [];
+  pokemonsToDisplay: Pokemon[] = [];
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -14,25 +18,26 @@ export class PokemonList {
     private router: Router,
   ) {
     const subscription = this.pokemonDataService.pokemons$.subscribe(
-      (pokemons) => {
+      (pokemons: Pokemon[]) => {
         this.pokemonsToDisplay = pokemons;
       },
     );
     this.subscriptions.push(subscription);
   }
 
-  formatName(name: string) {
+  formatName(name: string): string {
     return name
       .replace(/-/g, " ")
       .split(" ")
-      .map((name) => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase())
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
       .join(" ");
   }
-  clearPokemons() {
+
+  clearPokemons(): void {
     this.pokemonsToDisplay = [];
   }
 
-  showDetails(pokemon) {
+  showDetails(pokemon: Pokemon): void {
     this.router.navigateToRoute("details", { name: pokemon.name });
   }
 }

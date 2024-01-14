@@ -3,8 +3,8 @@
   "description": "Pokemon search application in Aurelia.",
   "version": "0.1.1",
   "repository": {
-    "type": "???",
-    "url": "???"
+    "type": "git",
+    "url": "https://github.com/tsmolarczyk/gottaCatchEmAll"
   },
   "license": "MIT",
   "dependencies": {

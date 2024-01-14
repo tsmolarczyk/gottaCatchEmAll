@@ -8,10 +8,10 @@ import { PokemonDataService } from "../../resources/pokemon-data-service";
 
 @inject(HttpClient, Router, PokemonDataService)
 export class PokemonDetails {
-  pokemonName = "";
-  pokemonData = null;
+  pokemonName: string = "";
+  pokemonData: PokemonDetails | null = null;
   animation;
-  showOtherContent = false;
+  showOtherContent: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -19,15 +19,15 @@ export class PokemonDetails {
     private pokemonDataService: PokemonDataService,
   ) {}
 
-  activate(params) {
+  activate(params: { name: string }): void {
     if (params.name) {
       this.pokemonName = params.name;
       this.pokemonDataService
         .fetchPokemonDetails(this.pokemonName)
-        .then((pokemonData) => {
+        .then((pokemonData: PokemonDetails) => {
           this.pokemonData = pokemonData;
         })
-        .catch((error) => {
+        .catch((error: Error) => {
           console.error("Error fetching pokemon details:", error);
         });
     }
@@ -74,6 +74,5 @@ export class PokemonDetails {
 
   returnHome() {
     this.router.navigateToRoute("home");
-    this.pokemonDataService.clearPokemonsInView();
   }
 }
