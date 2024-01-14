@@ -1,33 +1,40 @@
-# `gottaCatchEmAll`
+# Gotta Catch 'em All Pokemon Search
+This is a recruitment project that search Pokemon using PokeAPI.
 
-This project is bootstrapped by [aurelia-cli](https://github.com/aurelia/cli).
+## Technologies and libraries
+- **AureliaJS**: The main framework used for building the user interface.
+- **RxJS**: Used for managing the state of the application.
+- **LESS**: Used for styling the application’s components.
+- **Lottie**: Used for displaying loading animations.
 
-For more information, go to https://aurelia.io/docs/cli/webpack
+## Description
+The "Gotta Catch 'em All Pokemon Search" project is an interactive web application consisting of two main views: 'Search' and 'Details'. The application allows users to search for Pokemon by name (both complete and partial) and by color. Upon selecting a Pokemon, the user is transitioned to the 'Details' view. During data loading, a loading animation is displayed. Detailed information about the selected Pokemon includes its name, statistics, and an image. This application provides a user-friendly interface for Pokemon enthusiasts to explore and learn more about their favorite creatures.
 
-## Run dev app
+- Efficient Initial Loading: The application initially fetches a complete list of Pokemon and stores this data in localStorage for faster access on subsequent visits.
+- State Management with BehaviorSubject: Uses BehaviorSubject to effectively manage and share application state across components.
+- Alphabetical Display of Results: Search results are sorted alphabetically for easy navigation.
+- Placeholder for Missing Images: If an image is not available in the API, a placeholder image is displayed for consistency.
 
-Run `npm start`, then open `http://localhost:8080`
+## Screenshots
+![image](https://github.com/tsmolarczyk/gottaCatchEmAll/assets/74697368/ea2b66ee-2a6a-43d5-8f2d-5a8d628630ee)
+![image](https://github.com/tsmolarczyk/gottaCatchEmAll/assets/74697368/61a55487-8a0a-466f-9295-64e79d089667)
+![image](https://github.com/tsmolarczyk/gottaCatchEmAll/assets/74697368/c8ccebf3-7fc3-4750-8961-9c536b46ab84)
 
-You can change the standard webpack configurations from CLI easily with something like this: `npm start -- --open --port 8888`. However, it is better to change the respective npm scripts or `webpack.config.js` with these options, as per your need.
+## Live Demo
+[Here](https://gotta-catch-em-1fbt5r7en-tsmolarczyk.vercel.app/) is a link to the live version of project.
 
-To enable Webpack Bundle Analyzer, do `npm run analyze` (production build).
+## Source Code
+The source code of the project is available [here](https://github.com/tsmolarczyk/gottaCatchEmAll).
 
-To enable hot module reload, do `npm start -- --hmr`.
+## Installation and Running
+To run this project locally, follow these steps:
 
-To change dev server port, do `npm start -- --port 8888`.
+1. Clone the repository: `git clone https://github.com/tsmolarczyk/gottaCatchEmAll.git`
+2. Navigate to the project directory: `cd gottaCatchEmAll`
+3. Install dependencies: `npm install`
+4. Run the project: `npm run start`
 
-To change dev server host, do `npm start -- --host 127.0.0.1`
+The project should now be available at http://localhost:8080/.
 
-**PS:** You could mix all the flags as well, `npm start -- --host 127.0.0.1 --port 7070 --open --hmr`
-
-For long time aurelia-cli user, you can still use `au run` with those arguments like `au run --env prod --open --hmr`. But `au run` now simply executes `npm start` command.
-
-## Build for production
-
-Run `npm run build`, or the old way `au build --env prod`.
-
-## Unit tests
-
-Run `au test` (or `au jest`).
-
-To run in watch mode, `au test --watch` or `au jest --watch`.
+## Contact
+If you have any questions or suggestions, feel free to reach out to me!
