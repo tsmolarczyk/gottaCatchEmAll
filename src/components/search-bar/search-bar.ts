@@ -33,7 +33,6 @@ export class SearchBar {
 
   fetchPokemons() {
     this.pokemonsToDisplay = [];
-
     const pokemonsInStorage = localStorage.getItem("pokemons");
 
     if (!pokemonsInStorage) {
@@ -58,57 +57,44 @@ export class SearchBar {
 
   async processPokemons(allPokemons) {
     let pokemonsToFilter = [...allPokemons];
-
     const formattedQuery = this.searchQuery.replace(/\s+/g, "-");
 
     if (this.isColorQuery(formattedQuery)) {
-      const colorPokemons = await this.fetchPokemonsByColor(
+      pokemonsToFilter = await this.fetchPokemonsByColor(
         formattedQuery.toLowerCase(),
       );
-      pokemonsToFilter = [...colorPokemons];
-    }
-
-    if (!this.isColorQuery(formattedQuery)) {
-      pokemonsToFilter = pokemonsToFilter.filter((pokemon) =>
-        pokemon.name.includes(formattedQuery),
+    } else {
+      pokemonsToFilter = pokemonsToFilter.filter(
+        (pokemon) => pokemon.name && pokemon.name.includes(formattedQuery),
       );
     }
 
     const uniquePokemons = Array.from(
       new Set(pokemonsToFilter.map((p) => p.name)),
-    ).map((name) => {
-      return pokemonsToFilter.find((p) => p.name === name);
-    });
+    ).map((name) => pokemonsToFilter.find((p) => p.name === name));
 
+    // Przekaż wyniki do metody wyświetlającej.
     this.filterAndDisplayPokemons(uniquePokemons);
   }
 
   filterAndDisplayPokemons(pokemons) {
-    Promise.all(
-      pokemons.map((pokemon) =>
-        this.http.fetch(pokemon.url).then((response) => response.json()),
-      ),
-    ).then((detailsArray) => {
-      this.pokemonsToDisplay = detailsArray
-        .filter((details) => details.sprites && details.sprites.front_default)
-        .map((details) => ({
-          name: details.name,
-          imageUrl: details.sprites.front_default,
-        }));
-      this.pokemonDataService.updatePokemons(this.pokemonsToDisplay);
-      this.isResultFound = this.pokemonsToDisplay.length > 0;
-      this.pokemonDataService.updatePokemons(this.pokemonsToDisplay);
-      console.log("pokemonsToDisplay", this.pokemonsToDisplay);
-    });
+    this.pokemonsToDisplay = pokemons.map((pokemon) => ({
+      name: pokemon.name,
+      imageUrl: null,
+    }));
+
+    this.pokemonDataService.updatePokemons(this.pokemonsToDisplay);
+    this.isResultFound = this.pokemonsToDisplay.length > 0;
   }
 
   isColorQuery(query) {
     return this.allColorsOfPokemons.includes(query.toLowerCase());
   }
+
   clearList() {
     this.searchQuery = "";
     this.pokemonsToDisplay = [];
-    this.pokemonDataService.updatePokemons(this.pokemonsToDisplay);
+    this.pokemonDataService.clearPokemonsInView();
     this.isResultFound = true;
   }
 
@@ -117,8 +103,8 @@ export class SearchBar {
       `https://pokeapi.co/api/v2/pokemon-color/${color}`,
     );
     const data = await response.json();
-    // TODO:add color search
-    console.log("red pokemons", data.pokemon_species);
+    this.pokemonDataService.updatePokemons(data.pokemon_species);
+
     return data.pokemon_species;
   }
 }

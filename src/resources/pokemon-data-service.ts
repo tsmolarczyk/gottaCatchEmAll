@@ -12,12 +12,7 @@ export class PokemonDataService {
   updatePokemons(pokemons) {
     this.pokemonsSubject.next(pokemons);
   }
-  //
-  // getPokemonByName(name) {
-  //   return this.pokemons$.pipe(
-  //     map((pokemons) => pokemons.find((p) => p.name === name)),
-  //   );
-  // }
+
   async fetchPokemonDetails(name) {
     let currentData = this.pokemonsSubject.value.find((p) => p.name === name);
 
@@ -36,7 +31,6 @@ export class PokemonDataService {
 
       this.updatePokemonDetails(currentData);
     }
-
     return currentData;
   }
 

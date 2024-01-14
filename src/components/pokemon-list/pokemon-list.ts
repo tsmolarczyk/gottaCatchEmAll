@@ -20,9 +20,7 @@ export class PokemonList {
     );
     this.subscriptions.push(subscription);
   }
-  detached() {
-    this.subscriptions.forEach((sub) => sub.unsubscribe());
-  }
+
   formatName(name: string) {
     return name
       .replace(/-/g, " ")
