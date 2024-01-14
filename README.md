@@ -1,8 +1,9 @@
-# Gotta Catch 'em All Pokemon Search
+# Gotta Catch 'Em All - Pokemon Search
 This is a recruitment project that search Pokemon using PokeAPI.
 
 ## Technologies and libraries
-- **AureliaJS**: The main framework used for building the user interface.
+- **Aurelia**: The main framework used for building the user interface.
+- **Aurelia Router**: for managing views
 - **RxJS**: Used for managing the state of the application.
 - **LESS**: Used for styling the application’s components.
 - **Lottie**: Used for displaying loading animations.
@@ -21,7 +22,7 @@ The "Gotta Catch 'em All Pokemon Search" project is an interactive web applicati
 ![image](https://github.com/tsmolarczyk/gottaCatchEmAll/assets/74697368/c8ccebf3-7fc3-4750-8961-9c536b46ab84)
 
 ## Live Demo
-[Here](https://gotta-catch-em-all-pokemon.vercel.app/) is a link to the live version of project.
+[Here](https://gotta-catch-em-1fbt5r7en-tsmolarczyk.vercel.app/) is a link to the live version of project.
 
 ## Source Code
 The source code of the project is available [here](https://github.com/tsmolarczyk/gottaCatchEmAll).
