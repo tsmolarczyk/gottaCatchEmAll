@@ -19,7 +19,9 @@ export class PokemonList {
   ) {
     const subscription = this.pokemonDataService.pokemons$.subscribe(
       (pokemons: Pokemon[]) => {
-        this.pokemonsToDisplay = pokemons;
+        this.pokemonsToDisplay = pokemons.sort((a, b) =>
+          a.name.localeCompare(b.name),
+        );
       },
     );
     this.subscriptions.push(subscription);
@@ -36,7 +38,10 @@ export class PokemonList {
   clearPokemons(): void {
     this.pokemonsToDisplay = [];
   }
-
+  detached() {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
+    this.subscriptions = [];
+  }
   showDetails(pokemon: Pokemon): void {
     this.router.navigateToRoute("details", { name: pokemon.name });
   }
