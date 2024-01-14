@@ -21,7 +21,7 @@ The "Gotta Catch 'em All Pokemon Search" project is an interactive web applicati
 ![image](https://github.com/tsmolarczyk/gottaCatchEmAll/assets/74697368/c8ccebf3-7fc3-4750-8961-9c536b46ab84)
 
 ## Live Demo
-[Here](https://gotta-catch-em-3ay6sg5ku-tsmolarczyk.vercel.app/) is a link to the live version of project.
+[Here](https://gotta-catch-em-all-pokemon.vercel.app/) is a link to the live version of project.
 
 ## Source Code
 The source code of the project is available [here](https://github.com/tsmolarczyk/gottaCatchEmAll).
