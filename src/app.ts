@@ -4,6 +4,7 @@ import "./global.less";
 
 export class App {
   router: Router;
+
   configureRouter(config, router) {
     config.map([
       {

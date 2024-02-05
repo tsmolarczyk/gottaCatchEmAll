@@ -21,7 +21,5 @@ export function configure(aurelia: Aurelia): void {
     config.useStandardConfiguration().withBaseUrl("https://pokeapi.co/api/v2/");
   });
 
-  aurelia.start().then(() => aurelia.setRoot());
-
   aurelia.start().then(() => aurelia.setRoot(PLATFORM.moduleName("app")));
 }

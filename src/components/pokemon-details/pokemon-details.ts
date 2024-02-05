@@ -68,10 +68,6 @@ export class PokemonDetails {
     });
   }
 
-  detached() {
-    this.animation?.destroy();
-  }
-
   returnHome() {
     this.router.navigateToRoute("home");
   }

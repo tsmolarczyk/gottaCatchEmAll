@@ -1,5 +1,4 @@
 import { HttpClient } from "aurelia-fetch-client";
-import { EventAggregator } from "aurelia-event-aggregator";
 import { inject } from "aurelia-framework";
 import "./search-bar.less";
 import { PokemonDataService } from "../../resources/pokemon-data-service";
@@ -13,7 +12,10 @@ interface PokemonSpecies {
   name: string;
 }
 
-@inject(HttpClient, EventAggregator, PokemonDataService)
+@inject(
+  HttpClient,
+  PokemonDataService,
+)
 export class SearchBar {
   searchQuery: string = "";
   pokemonsToDisplay: Pokemon[] = [];
@@ -33,7 +35,6 @@ export class SearchBar {
 
   constructor(
     private http: HttpClient,
-    private ea: EventAggregator,
     private pokemonDataService: PokemonDataService,
   ) {
     this.fetchPokemons();
@@ -45,13 +46,11 @@ export class SearchBar {
 
     if (!pokemonsInStorage) {
       try {
-        const response = await this.http.fetch(
-          "https://pokeapi.co/api/v2/pokemon?limit=1500",
-        );
+        const response = await this.http.fetch("pokemon?limit=1500");
         const data = await response.json();
         localStorage.setItem("pokemons", JSON.stringify(data.results));
         if (this.searchQuery !== "") {
-          this.processPokemons(data.results);
+          await this.processPokemons(data.results);
         }
       } catch (error) {
         console.error("Error occurs:", error);
@@ -68,7 +67,7 @@ export class SearchBar {
     const formattedQuery = this.searchQuery.replace(/\s+/g, "-").toLowerCase();
 
     if (this.isColorQuery(formattedQuery)) {
-      pokemonsToFilter = await this.fetchPokemonsByColor(
+      pokemonsToFilter = await this.pokemonDataService.fetchPokemonsByColor(
         formattedQuery.toLowerCase(),
       );
     } else {
@@ -77,20 +76,15 @@ export class SearchBar {
       );
     }
 
-    const uniquePokemons = Array.from(
-      new Set(pokemonsToFilter.map((p) => p.name)),
-    ).map((name) =>
-      pokemonsToFilter.find((p) => p.name === name),
-    ) as PokemonSpecies[];
-
-    this.filterAndDisplayPokemons(uniquePokemons);
+    this.filterAndDisplayPokemons(pokemonsToFilter);
   }
-
   filterAndDisplayPokemons(pokemons: PokemonSpecies[]): void {
-    this.pokemonsToDisplay = pokemons.map((pokemon) => ({
-      name: pokemon.name,
-      imageUrl: null,
-    }));
+    this.pokemonsToDisplay = pokemons.map(
+      (pokemon: PokemonSpecies): { imageUrl: null; name: string } => ({
+        name: pokemon.name,
+        imageUrl: null,
+      }),
+    );
 
     this.pokemonDataService.updatePokemons(this.pokemonsToDisplay);
     this.isResultFound = this.pokemonsToDisplay.length > 0;
@@ -105,15 +99,4 @@ export class SearchBar {
     this.pokemonsToDisplay = [];
     this.pokemonDataService.clearPokemonsInView();
     this.isResultFound = true;
-  }
-
-  async fetchPokemonsByColor(color: string): Promise<PokemonSpecies[]> {
-    const response = await this.http.fetch(
-      `https://pokeapi.co/api/v2/pokemon-color/${color}`,
-    );
-    const data = await response.json();
-    this.pokemonDataService.updatePokemons(data.pokemon_species);
-
-    return data.pokemon_species;
-  }
-}
+  }}
