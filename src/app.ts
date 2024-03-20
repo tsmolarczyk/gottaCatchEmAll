@@ -23,13 +23,6 @@ export class App {
         title: "Details",
         href: "details/pokemon"
       },
-      {
-        route: "state",
-        name: "state",
-        moduleId: PLATFORM.moduleName("components/state-view/state-view"),
-        nav: true,
-        title: "State"
-      }
     ]);
 
     config.options.pushState = true;
